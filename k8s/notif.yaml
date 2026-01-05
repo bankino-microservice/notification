@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+  namespace: banking-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+        - name: notification-service
+          # Replace with your actual ECR Image URI
+          image: 342547628532.dkr.ecr.us-west-2.amazonaws.com/ebanking:notification-latest
+          ports:
+            - containerPort: 9090
+          env:
+            # 1. SERVER CONFIG
+            - name: SERVER_PORT
+              value: "9090"
+
+            # 2. KAFKA CONNECTION (Overrides localhost:9092)
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka-service:9092"
+            - name: SPRING_KAFKA_CONSUMER_GROUP_ID
+              value: "notification-group"
+
+            # 3. TWILIO CONFIGURATION
+            # Spring Boot automatically converts "twilio.account-sid" -> "TWILIO_ACCOUNT_SID"
+            - name: TWILIO_ACCOUNT_SID
+              value: "ACc7dafa72520c031aa2fb7f5ce3cbfd71"
+            - name: TWILIO_AUTH_TOKEN
+              value: "fa3875048b5f9d79961f57ea7e62d33a"
+            - name: TWILIO_PHONE_NUMBER
+              value: "+13136310647"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-service
+  namespace: banking-ns
+spec:
+  # 'ClusterIP' is usually enough for a consumer service (since nothing calls IT directly),
+  # but 'LoadBalancer' helps you view health checks or logs easily.
+  type: LoadBalancer
+  selector:
+    app: notification-service
+  ports:
+    - port: 80           # Exposed Port
+      targetPort: 9090   # Container Port
