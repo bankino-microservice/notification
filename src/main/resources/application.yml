@@ -11,7 +11,7 @@ spring:
         value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 server:
   port: 9090
-twilio:
-  account-sid: "ACc7dafa72520c031aa2fb7f5ce3cbfd71"  # From Twilio Dashboard
-  auth-token: "fa3875048b5f9d79961f57ea7e62d33a"              # From Twilio Dashboard
-  phone-number: "+13136310647"
+#twilio:
+#  account-sid: "ACc7dafa72520c031aa2fb7f5ce3cbfd71"  # From Twilio Dashboard
+#  auth-token: "fa3875048b5f9d79961f57ea7e62d33a"              # From Twilio Dashboard
+#  phone-number: "+13136310647"
