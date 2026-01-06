@@ -16,7 +16,7 @@ spec:
       containers:
         - name: notification-service
           # Replace with your actual ECR Image URI
-          image: 342547628532.dkr.ecr.us-west-2.amazonaws.com/ebanking:notification-latest
+          image: 342547628532.dkr.ecr.us-west-2.amazonaws.com/ebanking:notif-latest
           ports:
             - containerPort: 9090
           env:
