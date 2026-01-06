@@ -116,7 +116,7 @@ pipeline{
 
 
                           # 3. Apply the updated file
-                          kubectl apply -f k8s/compte.yaml
+                          kubectl apply -f k8s/notif.yaml
 
 
                           """
