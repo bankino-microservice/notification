@@ -95,6 +95,7 @@ pipeline{
                     docker tag ${IMAGE_NAME}:notif${BUILD_NUMBER} ${IMAGE_NAME}:notif-latest
 
                     # 4. Push both tags
+
                     docker push ${IMAGE_NAME}:notif${BUILD_NUMBER}
                     docker push ${IMAGE_NAME}:notif-latest
                     """
