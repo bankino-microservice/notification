@@ -24,20 +24,31 @@ spec:
             - name: SERVER_PORT
               value: "9090"
 
-            # 2. KAFKA CONNECTION (Overrides localhost:9092)
+            # 2. KAFKA CONNECTION
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
               value: "kafka-service:9092"
             - name: SPRING_KAFKA_CONSUMER_GROUP_ID
               value: "notification-group"
 
-            # 3. TWILIO CONFIGURATION
-            # Spring Boot automatically converts "twilio.account-sid" -> "TWILIO_ACCOUNT_SID"
+            # 3. TWILIO CONFIGURATION (SECURE)
+            # Instead of 'value', we use 'valueFrom' -> 'secretKeyRef'
             - name: TWILIO_ACCOUNT_SID
-              value: "ACc7dafa72520c031aa2fb7f5ce3cbfd71"
+              valueFrom:
+                secretKeyRef:
+                  name: notification-secrets
+                  key: twilio-account-sid
+
             - name: TWILIO_AUTH_TOKEN
-              value: "fa3875048b5f9d79961f57ea7e62d33a"
+              valueFrom:
+                secretKeyRef:
+                  name: notification-secrets
+                  key: twilio-auth-token
+
             - name: TWILIO_PHONE_NUMBER
-              value: "+13136310647"
+              valueFrom:
+                secretKeyRef:
+                  name: notification-secrets
+                  key: twilio-phone-number
 
 ---
 apiVersion: v1
@@ -46,8 +57,6 @@ metadata:
   name: notification-service
   namespace: banking-ns
 spec:
-  # 'ClusterIP' is usually enough for a consumer service (since nothing calls IT directly),
-  # but 'LoadBalancer' helps you view health checks or logs easily.
   type: LoadBalancer
   selector:
     app: notification-service
