@@ -34,7 +34,7 @@ pipeline{
     stages{
         stage("Checkout"){
             steps{
-              git branch:"jenkins-acc" , url:"https://github.com/bankino-microservice/Account-service.git",
+              git branch:"main" , url:"https://github.com/bankino-microservice/notification.git",
                 credentialsId: 'git-token'
 
 
@@ -89,14 +89,14 @@ pipeline{
                     | docker login --username AWS --password-stdin ${REGISTRY_URL}
 
                     # 2. Build Docker Image (immutable tag)
-                    docker build -t ${IMAGE_NAME}:account${BUILD_NUMBER} .
+                    docker build -t ${IMAGE_NAME}:notif${BUILD_NUMBER} .
 
                     # 3. Tag as legacy-latest (mutable tag)
-                    docker tag ${IMAGE_NAME}:account${BUILD_NUMBER} ${IMAGE_NAME}:account-latest
+                    docker tag ${IMAGE_NAME}:notif${BUILD_NUMBER} ${IMAGE_NAME}:notif-latest
 
                     # 4. Push both tags
-                    docker push ${IMAGE_NAME}:account${BUILD_NUMBER}
-                    docker push ${IMAGE_NAME}:account-latest
+                    docker push ${IMAGE_NAME}:notif${BUILD_NUMBER}
+                    docker push ${IMAGE_NAME}:notif-latest
                     """
                 }
             }
